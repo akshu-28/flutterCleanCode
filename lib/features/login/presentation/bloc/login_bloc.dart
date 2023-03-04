@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<FutureOr<void>> loginEvent(event, emit) async {
     emit(LoggingIn());
-
+    await Future.delayed(const Duration(seconds: 5));
     final result = await loginUser.execute(parameters: event.parameters);
     result.fold((l) {
       emit(LoggedInWithError(message: _getErrorMessage(l)));

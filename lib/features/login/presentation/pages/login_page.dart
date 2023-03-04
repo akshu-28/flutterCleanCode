@@ -20,7 +20,7 @@ class LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   bool _isShowPassword = false;
   final _formKey = GlobalKey<FormState>();
-  final _emailTextFieldController = TextEditingController();
+  final _mobNoTextFieldController = TextEditingController();
   final _passwordTextFieldController = TextEditingController();
 
   void _handleState(state) {
@@ -52,33 +52,33 @@ class LoginPageState extends State<LoginPage> {
 
   void _doLogin() {
     if (_formKey.currentState!.validate()) {
-      String email = _emailTextFieldController.text.toString().trim();
-      String password = _passwordTextFieldController.text.toString().trim();
+      String mobileNo = _mobNoTextFieldController.text.toString().trim();
+
       widget.loginBloc
-          .add(LoginUserEvent(parameters: LoginRequest(userName: email)));
+          .add(LoginUserEvent(parameters: LoginRequest(userName: mobileNo)));
     }
   }
 
   Widget _headerWidget() {
     return Container(
-      margin: const EdgeInsets.only(top: 36, left: 16, right: 16),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
-          TextHeader(text: "Sign In"),
-          Text(
-              "Please sign in first to get all feature of this app. If you don't have any account, create a new one"),
+          TextHeader(text: "Login"),
         ],
       ),
     );
   }
 
   Widget _loadingBar() {
-    return Container(
-      margin: const EdgeInsets.only(top: 8, bottom: 28, left: 16, right: 16),
-      child: LinearProgressIndicator(
-        value: _isLoading ? null : 0,
-      ),
+    return BlocBuilder<LoginBloc, LoginState>(
+      bloc: widget.loginBloc,
+      builder: (context, state) {
+        return LinearProgressIndicator(
+          value: _isLoading ? null : 0,
+        );
+      },
     );
   }
 
@@ -90,7 +90,7 @@ class LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             TextFormField(
-              controller: _emailTextFieldController,
+              controller: _mobNoTextFieldController,
               decoration: const InputDecoration(
                 hintText: "Email",
               ),
@@ -140,22 +140,29 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          automaticallyImplyLeading: false,
+          title: _headerWidget(),
+          bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(6.0), child: _loadingBar()),
+        ),
         body: SafeArea(
-            child: SingleChildScrollView(
-                child: BlocConsumer<LoginBloc, LoginState>(
-      bloc: widget.loginBloc,
-      listener: (context, state) {
-        _handleState(state);
-      },
-      builder: (context, state) {
-        return Column(
-          children: [
-            _headerWidget(),
-            _loadingBar(),
-            _signInForm(),
-          ],
-        );
-      },
-    ))));
+            child: BlocConsumer<LoginBloc, LoginState>(
+          bloc: widget.loginBloc,
+          listener: (context, state) {
+            _handleState(state);
+          },
+          builder: (context, state) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _signInForm(),
+                ],
+              ),
+            );
+          },
+        )));
   }
 }
