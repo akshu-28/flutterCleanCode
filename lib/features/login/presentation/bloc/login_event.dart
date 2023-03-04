@@ -5,7 +5,7 @@ abstract class LoginEvent extends Equatable {
 }
 
 class LoginUserEvent extends LoginEvent {
-  final LoginParams parameters;
+  final LoginRequest parameters;
   const LoginUserEvent({required this.parameters});
   @override
   List<Object?> get props => [];

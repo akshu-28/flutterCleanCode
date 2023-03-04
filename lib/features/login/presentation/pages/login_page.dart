@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttercleancode/features/login/data/models/login_request.dart';
 import 'package:fluttercleancode/features/login/presentation/pages/widgets/primary_button.dart';
 import 'package:fluttercleancode/features/login/presentation/pages/widgets/text_header.dart';
 
 import '../../../../core/router/router.dart';
-import '../../domain/params/login_params.dart';
 import '../bloc/login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,8 +25,10 @@ class LoginPageState extends State<LoginPage> {
 
   void _handleState(state) {
     if (state is LoggedInWithSuccess) {
+      _isLoading = false;
       Navigator.pushReplacementNamed(context, AppRouter.routeWatchlist);
     } else if (state is LoggedInWithError) {
+      _isLoading = false;
       _showAlert(state.message);
     } else if (state is LoggingIn) {
       _isLoading = true;
@@ -52,8 +54,8 @@ class LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       String email = _emailTextFieldController.text.toString().trim();
       String password = _passwordTextFieldController.text.toString().trim();
-      widget.loginBloc.add(LoginUserEvent(
-          parameters: LoginParams(userName: email, password: password)));
+      widget.loginBloc
+          .add(LoginUserEvent(parameters: LoginRequest(userName: email)));
     }
   }
 

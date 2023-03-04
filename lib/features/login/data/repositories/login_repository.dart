@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fluttercleancode/features/login/data/datasources/login_remote.dart';
-import 'package:fluttercleancode/features/login/domain/params/login_params.dart';
+import 'package:fluttercleancode/features/login/data/models/login_request.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
@@ -13,7 +13,7 @@ class LoginRepositoryImpl implements LoginRepository {
 
   @override
   Future<Either<Failure, String>> loginUser(
-      {required LoginParams parameters}) async {
+      {required LoginRequest parameters}) async {
     try {
       final response = await remoteDataSource.loginUser(parameters: parameters);
       return Right(response);

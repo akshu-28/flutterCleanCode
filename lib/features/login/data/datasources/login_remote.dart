@@ -1,20 +1,22 @@
-import 'package:fluttercleancode/core/constants/api_constants.dart';
 import 'package:fluttercleancode/core/constants/response_constants.dart';
+import 'package:fluttercleancode/features/login/data/models/login_request.dart';
+
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/httpImpl/http_connection.dart';
-import '../../domain/params/login_params.dart';
 
 abstract class LoginDataSource {
-  Future<String> loginUser({required LoginParams parameters});
+  Future<String> loginUser({required LoginRequest parameters});
 }
 
 class LoginDataSourceImpl implements LoginDataSource {
   @override
-  Future<String> loginUser({required LoginParams parameters}) async {
-    try {
-      await HttpConnect.get(path: ApiConstants.loginUrl);
-      return ResponseConst.loggedIn;
-    } catch (e) {
-      return e.toString();
-    }
+  Future<String> loginUser({required LoginRequest parameters}) async {
+    await HttpConnect.post(path: ApiConstants.loginUrl, body: {
+      "request": {
+        "data": {"mobNo": parameters.userName},
+        "appID": "f79f65f1b98e116f40633dbb46fd5e21"
+      }
+    });
+    return ResponseConst.loggedIn;
   }
 }
