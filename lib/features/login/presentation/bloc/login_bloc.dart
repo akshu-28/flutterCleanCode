@@ -24,7 +24,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     final result = await loginUser.execute(parameters: event.parameters);
     result.fold((l) {
-      print(l);
       emit(LoggedInWithError(message: _getErrorMessage(l)));
     }, (r) => emit(LoggedInWithSuccess(message: r)));
   }

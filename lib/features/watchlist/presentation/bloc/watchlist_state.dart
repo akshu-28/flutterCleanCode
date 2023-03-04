@@ -12,4 +12,8 @@ class WatchlistDone extends WatchlistState {
   WatchlistDone(this.watchlist);
 }
 
-class WatchlistError extends WatchlistState {}
+class WatchlistError extends WatchlistState {
+  final String message;
+
+  WatchlistError({required this.message});
+}

@@ -22,7 +22,7 @@ class _WatchlistState extends State<Watchlist> {
   void initState() {
     watchlistBloc = widget.watchlistBloc;
 
-    watchlistBloc.add(FetchWatchlist());
+    watchlistBloc.add(const FetchWatchlist());
     super.initState();
   }
 
@@ -130,7 +130,9 @@ class _WatchlistState extends State<Watchlist> {
                 );
               }
 
-              if (state is WatchlistError) return const ErrorsWidget();
+              if (state is WatchlistError) {
+                return ErrorsWidget(message: state.message);
+              }
               return loadData(context);
             },
           ),
@@ -237,7 +239,8 @@ class _WatchlistState extends State<Watchlist> {
 }
 
 class ErrorsWidget extends StatelessWidget {
-  const ErrorsWidget({Key? key}) : super(key: key);
+  final String message;
+  const ErrorsWidget({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +253,7 @@ class ErrorsWidget extends StatelessWidget {
           size: 60,
           color: Colors.red[900],
         ),
-        const Text("Unknown Error")
+        Text(message)
       ],
     ));
   }
